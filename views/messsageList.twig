@@ -1,0 +1,46 @@
+<html>
+  <head>
+      <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <a href="/messages/form">Add a message</a>
+    <h1>List of messages</h1>
+
+    {# <form id="deleteForm" action="/messages/delete/{{m._id}}" method="POST">
+      <input type="hidden" name="_method" value="DELETE">
+    </form> #}
+
+    <table>
+      <tr>
+        <th>Pseudo</th>
+        <th>Content</th>
+        <th>Likes</th>
+        <th>Actions</th>
+      </tr>
+      {% for m in cont %}
+      <tr>
+        <td>{{m.pseudo}}</td>
+        <td>{{m.content}}</td>
+        <td>{{m.likes}}</td>
+        <td><a href="/messages/likeMessage/{{m._id}}">Like</a> <a href="/messages/editForm/{{m._id}}">edit</a> <button onclick="deleteMsg('{{m._id}}')">delete</button></td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <script>
+      const socket = io.connect("ws://localhost:3000");
+
+      function deleteMsg(msgId) {
+        /*event.preventDefault(); 
+        document.getElementById('deleteForm').submit()*/
+        socket.emit('deleteNotification', {msgId});
+      }
+
+      socket.on("delete", (data)=>{
+          let p=document.createElement("p")
+          p.innerText = data
+          document.body.append(p)
+        })
+    </script>
+  </body>
+</html>

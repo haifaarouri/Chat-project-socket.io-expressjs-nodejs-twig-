@@ -1,0 +1,56 @@
+<html>
+  <head>
+      <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <h1>Chat :</h1>
+    <form action="/messages/addMessage" method="POST">
+      <div>
+        <label for="pseudo">Pseudo :</label>
+        <input type="text" id="pseudo" name="pseudo">
+      </div>
+      <div>
+        <label for="content">Content :</label>
+        <input type="text" id="content" name="content" onkeyup="onKeyUp()">
+      </div>
+      {# <button type="submit" onclick="envoyer()">Envoyer</button> #}
+      <button type="submit">Envoyer</button>
+    </form>
+    <script>
+        const socket = io.connect("ws://localhost:3000");
+
+        socket.on("msg", (data)=>{
+          let p=document.createElement("p")
+          p.innerText = data
+          document.body.append(p)
+        })
+
+        socket.on("deconx", (data)=>{
+          let p=document.createElement("p")
+          p.innerText = data
+          document.body.append(p)
+        })
+
+        {# var userPseudo = document.getElementById("pseudo").value; #}
+        {# console.log(userPseudo) #}
+
+        function envoyer(){
+          let p=document.createElement("p")
+          p.innerText = document.getElementById("content").value;
+          document.body.append(p)
+        }
+
+        function onKeyUp(){
+          var userPseudo = document.getElementById("pseudo").value;
+          socket.emit("IsTyping", `${userPseudo} is typing : ${document.getElementById("content").value}`)
+        }
+
+        socket.on("msgTyping", (data)=>{
+          let p=document.createElement("p")
+          p.innerText = data
+          document.body.append(p)
+        })
+
+    </script>
+  </body>
+</html>

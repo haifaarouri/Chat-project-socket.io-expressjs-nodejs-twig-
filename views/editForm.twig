@@ -1,0 +1,13 @@
+<h1>Edit a message</h1>
+<form action="/messages/{{m._id}}" method="POST">
+<input type="hidden" name="_method" value="PUT">
+  <div>
+    <label for="pseudo">Pseudo</label>
+    <input type="text" id="pseudo" name="pseudo" value="{{ message.pseudo }}">
+  </div>
+  <div>
+    <label for="content">Content</label>
+    <input type="content" id="content" name="content" value="{{ message.content }}">
+  </div>
+  <button type="submit">edit</button>
+</form>
